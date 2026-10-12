@@ -5,7 +5,7 @@ namespace CccPrint.Client;
 
 public sealed class ClientOptions
 {
-    public string ServerDeviceName { get; init; } = "PC-202502211303";
+    public string ServerDeviceName { get; init; } = "YOUR-ADMIN-PC";
 
     public int ServerPort { get; init; } = 8010;
 

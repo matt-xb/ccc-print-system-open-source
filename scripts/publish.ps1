@@ -27,5 +27,11 @@ if ($LASTEXITCODE -ne 0) {
     throw "Publishing the client application failed with exit code $LASTEXITCODE."
 }
 
+foreach ($component in @("admin", "client")) {
+    $output = Join-Path $adminVersionRoot $component
+    Copy-Item -LiteralPath (Join-Path $projectRoot "LICENSE"), (Join-Path $projectRoot "README.md") -Destination $output
+    Copy-Item -LiteralPath (Join-Path $projectRoot "licenses") -Destination $output -Recurse -Force
+}
+
 Write-Output "Published admin: $adminVersionRoot"
 Write-Output "Published client: $clientVersionRoot"

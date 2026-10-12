@@ -855,7 +855,7 @@ public partial class MainWindow : Window
             var updateDirectory = Path.Combine(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData),
-                "CCC资料打印系统",
+                "CCC资料打印系统公开版",
                 "打印端",
                 "updates",
                 availableVersion.ToString(3));

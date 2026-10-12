@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>CccPrint.Client</RootNamespace>
-    <AssemblyName>CCC资料打印端</AssemblyName>
+    <AssemblyName>CCC资料打印端公开版</AssemblyName>
     <Product>CCC 资料打印端</Product>
     <ApplicationIcon>..\..\assets\app-icon.ico</ApplicationIcon>
     <Version>0.6.29</Version>

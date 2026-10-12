@@ -1,0 +1,671 @@
+PDFium dependency copyright/license notices from historical chromium/3396. The NuGet binary is the no-V8/no-XFA build.
+
+bigint (third_party/bigint/LICENSE)
+
+                            C++ Big Integer Library
+                          (see ChangeLog for version)
+
+                        http://mattmccutchen.net/bigint/
+
+       Written and maintained by Matt McCutchen <matt@mattmccutchen.net>
+
+You can use this library in a C++ program to do arithmetic on integers of size
+limited only by your computer's memory.  The library provides BigUnsigned and
+BigInteger classes that represent nonnegative integers and signed integers,
+respectively.  Most of the C++ arithmetic operators are overloaded for these
+classes, so big-integer calculations are as easy as:
+
+    #include "BigIntegerLibrary.hh"
+
+    BigInteger a = 65536;
+    cout << (a * a * a * a * a * a * a * a);
+
+    (prints 340282366920938463463374607431768211456)
+
+The code in `sample.cc' demonstrates the most important features of the library.
+To get started quickly, read the code and explanations in that file and run it.
+If you want more detail or a feature not shown in `sample.cc', consult the
+consult the actual header and source files, which are thoroughly commented.
+
+This library emphasizes ease of use and clarity of implementation over speed;
+some users will prefer GMP (http://swox.com/gmp/), which is faster.  The code is
+intended to be reasonably portable across computers and modern C++ compilers; in
+particular, it uses whatever word size the computer provides (32-bit, 64-bit, or
+otherwise).
+
+Compiling programs that use the library
+---------------------------------------
+The library consists of a folder full of C++ header files (`.hh') and source
+files (`.cc').  Your own programs should `#include' the necessary header files
+and link with the source files.  A makefile that builds the sample program
+(`sample.cc') is included; you can adapt it to replace the sample with your own
+program.
+
+Alternatively, you can use your own build system or IDE.  In that case, you must
+put the library header files where the compiler will find them and arrange to
+have your program linked with the library source files; otherwise, you will get
+errors about missing header files or "undefined references".  To learn how to do
+this, consult the documentation for the build system or IDE; don't bother asking
+me.  Adding all the library files to your project will work in many IDEs but may
+not be the most desirable approach.
+
+Resources
+---------
+The library's Web site (above) provides links to released versions, the current
+development version, and a mailing list for release announcements, questions,
+bug reports, and other discussion of the library.  I would be delighted to hear
+from you if you like this library and/or find a good use for it.
+
+Bugs and enhancements
+---------------------
+The library has been tested by me and others but is by no means bug-free.  If
+you find a bug, please report it, whether it comes in the form of compiling
+trouble, a mathematically inaccurate result, or a memory-management blooper
+(since I use Java, these are altogether too common in my C++).  I generally fix
+all reported bugs.  You are also welcome to request enhancements, but I am
+unlikely to do substantial amounts of work on enhancements at this point.
+
+Legal
+-----
+I, Matt McCutchen, the sole author of the original Big Integer Library, waive my
+copyright to it, placing it in the public domain.  The library comes with
+absolutely no warranty.
+
+~~~~
+
+
+agg (third_party/agg23/agg_basics.h)
+
+//----------------------------------------------------------------------------
+// Anti-Grain Geometry - Version 2.3
+// Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
+//
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
+// This software is provided "as is" without express or implied
+// warranty, and with no claim as to its suitability for any purpose.
+//
+//----------------------------------------------------------------------------
+// Contact: mcseem@antigrain.com
+//          mcseemagg@yahoo.com
+//          http://www.antigrain.com
+//----------------------------------------------------------------------------
+
+
+lcms (third_party/lcms/include/lcms2.h)
+//---------------------------------------------------------------------------------
+//
+//  Little Color Management System
+//  Copyright (c) 1998-2016 Marti Maria Saguer
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the "Software"),
+// to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense,
+// and/or sell copies of the Software, and to permit persons to whom the Software
+// is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+//---------------------------------------------------------------------------------
+//
+// Version 2.8
+//
+
+
+
+openjpeg (third_party/libopenjpeg20/openjpeg.h)
+/*
+* The copyright in this software is being made available under the 2-clauses
+* BSD License, included below. This software may be subject to other third
+* party and contributor rights, including patent rights, and no such rights
+* are granted under this license.
+*
+* Copyright (c) 2002-2014, Universite catholique de Louvain (UCL), Belgium
+* Copyright (c) 2002-2014, Professor Benoit Macq
+* Copyright (c) 2001-2003, David Janssens
+* Copyright (c) 2002-2003, Yannick Verschueren
+* Copyright (c) 2003-2007, Francois-Olivier Devaux
+* Copyright (c) 2003-2014, Antonin Descampe
+* Copyright (c) 2005, Herve Drolon, FreeImage Team
+* Copyright (c) 2006-2007, Parvatha Elangovan
+* Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
+* Copyright (c) 2010-2011, Kaori Hagihara
+* Copyright (c) 2011-2012, Centre National d'Etudes Spatiales (CNES), France
+* Copyright (c) 2012, CS Systemes d'Information, France
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions
+* are met:
+* 1. Redistributions of source code must retain the above copyright
+*    notice, this list of conditions and the following disclaimer.
+* 2. Redistributions in binary form must reproduce the above copyright
+*    notice, this list of conditions and the following disclaimer in the
+*    documentation and/or other materials provided with the distribution.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS `AS IS'
+* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+* ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
+*/
+
+
+libpng (third_party/libpng16/png.h)
+
+/* png.h - header file for PNG reference library
+ *
+ * libpng version 1.6.22, May 26, 2016
+ *
+ * Copyright (c) 1998-2002,2004,2006-2016 Glenn Randers-Pehrson
+ * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
+ * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
+ *
+ * This code is released under the libpng license (See LICENSE, below)
+ *
+ * Authors and maintainers:
+ *   libpng versions 0.71, May 1995, through 0.88, January 1996: Guy Schalnat
+ *   libpng versions 0.89, June 1996, through 0.96, May 1997: Andreas Dilger
+ *   libpng versions 0.97, January 1998, through 1.6.22, May 26, 2016:
+ *     Glenn Randers-Pehrson.
+ *   See also "Contributing Authors", below.
+ */
+
+/*
+ * COPYRIGHT NOTICE, DISCLAIMER, and LICENSE:
+ *
+ * If you modify libpng you may insert additional notices immediately following
+ * this sentence.
+ *
+ * This code is released under the libpng license.
+ *
+ * Some files in the "contrib" directory and some configure-generated
+ * files that are distributed with libpng have other copyright owners and
+ * are released under other open source licenses.
+ *
+ * libpng versions 1.0.7, July 1, 2000 through 1.6.22, May 26, 2016 are
+ * Copyright (c) 2000-2002, 2004, 2006-2016 Glenn Randers-Pehrson, are
+ * derived from libpng-1.0.6, and are distributed according to the same
+ * disclaimer and license as libpng-1.0.6 with the following individuals
+ * added to the list of Contributing Authors:
+ *
+ *    Simon-Pierre Cadieux
+ *    Eric S. Raymond
+ *    Mans Rullgard
+ *    Cosmin Truta
+ *    Gilles Vollant
+ *    James Yu
+ *
+ * and with the following additions to the disclaimer:
+ *
+ *    There is no warranty against interference with your enjoyment of the
+ *    library or against infringement.  There is no warranty that our
+ *    efforts or the library will fulfill any of your particular purposes
+ *    or needs.  This library is provided with all faults, and the entire
+ *    risk of satisfactory quality, performance, accuracy, and effort is with
+ *    the user.
+ *
+ * Some files in the "contrib" directory have other copyright owners and
+ * are released under other open source licenses.
+ *
+ *
+ * libpng versions 0.97, January 1998, through 1.0.6, March 20, 2000, are
+ * Copyright (c) 1998-2000 Glenn Randers-Pehrson, are derived from
+ * libpng-0.96, and are distributed according to the same disclaimer and
+ * license as libpng-0.96, with the following individuals added to the list
+ * of Contributing Authors:
+ *
+ *    Tom Lane
+ *    Glenn Randers-Pehrson
+ *    Willem van Schaik
+ *
+ * Some files in the "scripts" directory have different copyright owners
+ * but are also released under this license.
+ *
+ * libpng versions 0.89, June 1996, through 0.96, May 1997, are
+ * Copyright (c) 1996-1997 Andreas Dilger, are derived from libpng-0.88,
+ * and are distributed according to the same disclaimer and license as
+ * libpng-0.88, with the following individuals added to the list of
+ * Contributing Authors:
+ *
+ *    John Bowler
+ *    Kevin Bracey
+ *    Sam Bushell
+ *    Magnus Holmgren
+ *    Greg Roelofs
+ *    Tom Tanner
+ *
+ * Some files in the "scripts" directory have other copyright owners
+ * but are released under this license.
+ *
+ * libpng versions 0.5, May 1995, through 0.88, January 1996, are
+ * Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.
+ *
+ * For the purposes of this copyright and license, "Contributing Authors"
+ * is defined as the following set of individuals:
+ *
+ *    Andreas Dilger
+ *    Dave Martindale
+ *    Guy Eric Schalnat
+ *    Paul Schmidt
+ *    Tim Wegner
+ *
+ * The PNG Reference Library is supplied "AS IS".  The Contributing Authors
+ * and Group 42, Inc. disclaim all warranties, expressed or implied,
+ * including, without limitation, the warranties of merchantability and of
+ * fitness for any purpose.  The Contributing Authors and Group 42, Inc.
+ * assume no liability for direct, indirect, incidental, special, exemplary,
+ * or consequential damages, which may result from the use of the PNG
+ * Reference Library, even if advised of the possibility of such damage.
+ *
+ * Permission is hereby granted to use, copy, modify, and distribute this
+ * source code, or portions hereof, for any purpose, without fee, subject
+ * to the following restrictions:
+ *
+ *   1. The origin of this source code must not be misrepresented.
+ *
+ *   2. Altered versions must be plainly marked as such and must not
+ *      be misrepresented as being the original source.
+ *
+ *   3. This Copyright notice may not be removed or altered from any
+ *      source or altered source distribution.
+ *
+ * The Contributing Authors and Group 42, Inc. specifically permit, without
+ * fee, and encourage the use of this source code as a component to
+ * supporting the PNG file format in commercial products.  If you use this
+ * source code in a product, acknowledgment is not required but would be
+ * appreciated.
+ *
+ * END OF COPYRIGHT NOTICE, DISCLAIMER, and LICENSE.
+ *
+ * TRADEMARK:
+ *
+ * The name "libpng" has not been registered by the Copyright owner
+ * as a trademark in any jurisdiction.  However, because libpng has
+ * been distributed and maintained world-wide, continually since 1995,
+ * the Copyright owner claims "common-law trademark protection" in any
+ * jurisdiction where common-law trademark is recognized.
+ *
+ * OSI CERTIFICATION:
+ *
+ * Libpng is OSI Certified Open Source Software.  OSI Certified Open Source is
+ * a certification mark of the Open Source Initiative. OSI has not addressed
+ * the additional disclaimers inserted at version 1.0.7.
+ *
+ * EXPORT CONTROL:
+ *
+ * The Copyright owner believes that the Export Control Classification
+ * Number (ECCN) for libpng is EAR99, which means not subject to export
+ * controls or International Traffic in Arms Regulations (ITAR) because
+ * it is open source, publicly available software, that does not contain
+ * any encryption software.  See the EAR, paragraphs 734.3(b)(3) and
+ * 734.7(b).
+ */
+
+/*
+ * A "png_get_copyright" function is available, for convenient use in "about"
+ * boxes and the like:
+ *
+ *    printf("%s", png_get_copyright(NULL));
+ *
+ * Also, the PNG logo (in PNG format, of course) is supplied in the
+ * files "pngbar.png" and "pngbar.jpg (88x31) and "pngnow.png" (98x31).
+ */
+
+/*
+ * The contributing authors would like to thank all those who helped
+ * with testing, bug fixes, and patience.  This wouldn't have been
+ * possible without all of you.
+ *
+ * Thanks to Frank J. T. Wojcik for helping with the documentation.
+ */
+
+/* Note about libpng version numbers:
+ *
+ *    Due to various miscommunications, unforeseen code incompatibilities
+ *    and occasional factors outside the authors' control, version numbering
+ *    on the library has not always been consistent and straightforward.
+ *    The following table summarizes matters since version 0.89c, which was
+ *    the first widely used release:
+ *
+ *    source                 png.h  png.h  shared-lib
+ *    version                string   int  version
+ *    -------                ------ -----  ----------
+ *    0.89c "1.0 beta 3"     0.89      89  1.0.89
+ *    0.90  "1.0 beta 4"     0.90      90  0.90  [should have been 2.0.90]
+ *    0.95  "1.0 beta 5"     0.95      95  0.95  [should have been 2.0.95]
+ *    0.96  "1.0 beta 6"     0.96      96  0.96  [should have been 2.0.96]
+ *    0.97b "1.00.97 beta 7" 1.00.97   97  1.0.1 [should have been 2.0.97]
+ *    0.97c                  0.97      97  2.0.97
+ *    0.98                   0.98      98  2.0.98
+ *    0.99                   0.99      98  2.0.99
+ *    0.99a-m                0.99      99  2.0.99
+ *    1.00                   1.00     100  2.1.0 [100 should be 10000]
+ *    1.0.0      (from here on, the   100  2.1.0 [100 should be 10000]
+ *    1.0.1       png.h string is   10001  2.1.0
+ *    1.0.1a-e    identical to the  10002  from here on, the shared library
+ *    1.0.2       source version)   10002  is 2.V where V is the source code
+ *    1.0.2a-b                      10003  version, except as noted.
+ *    1.0.3                         10003
+ *    1.0.3a-d                      10004
+ *    1.0.4                         10004
+ *    1.0.4a-f                      10005
+ *    1.0.5 (+ 2 patches)           10005
+ *    1.0.5a-d                      10006
+ *    1.0.5e-r                      10100 (not source compatible)
+ *    1.0.5s-v                      10006 (not binary compatible)
+ *    1.0.6 (+ 3 patches)           10006 (still binary incompatible)
+ *    1.0.6d-f                      10007 (still binary incompatible)
+ *    1.0.6g                        10007
+ *    1.0.6h                        10007  10.6h (testing xy.z so-numbering)
+ *    1.0.6i                        10007  10.6i
+ *    1.0.6j                        10007  2.1.0.6j (incompatible with 1.0.0)
+ *    1.0.7beta11-14        DLLNUM  10007  2.1.0.7beta11-14 (binary compatible)
+ *    1.0.7beta15-18           1    10007  2.1.0.7beta15-18 (binary compatible)
+ *    1.0.7rc1-2               1    10007  2.1.0.7rc1-2 (binary compatible)
+ *    1.0.7                    1    10007  (still compatible)
+ *    ...
+ *    1.0.19                  10    10019  10.so.0.19[.0]
+ *    ...
+ *    1.2.56                  13    10256  12.so.0.56[.0]
+ *    ...
+ *    1.5.27                  15    10527  15.so.15.27[.0]
+ *    ...
+ *    1.6.22                  16    10622  16.so.16.22[.0]
+ *
+ *    Henceforth the source version will match the shared-library major
+ *    and minor numbers; the shared-library major version number will be
+ *    used for changes in backward compatibility, as it is intended.  The
+ *    PNG_LIBPNG_VER macro, which is not used within libpng but is available
+ *    for applications, is an unsigned integer of the form xyyzz corresponding
+ *    to the source version x.y.z (leading zeros in y and z).  Beta versions
+ *    were given the previous public release number plus a letter, until
+ *    version 1.0.6j; from then on they were given the upcoming public
+ *    release number plus "betaNN" or "rcNN".
+ *
+ *    Binary incompatibility exists only when applications make direct access
+ *    to the info_ptr or png_ptr members through png.h, and the compiled
+ *    application is loaded with a different version of the library.
+ *
+ *    DLLNUM will change each time there are forward or backward changes
+ *    in binary compatibility (e.g., when a new feature is added).
+ *
+ * See libpng.txt or libpng.3 for more information.  The PNG specification
+ * is available as a W3C Recommendation and as an ISO Specification,
+ * <http://www.w3.org/TR/2003/REC-PNG-20031110/
+ */
+
+/*
+ * Y2K compliance in libpng:
+ * =========================
+ *
+ *    May 26, 2016
+ *
+ *    Since the PNG Development group is an ad-hoc body, we can't make
+ *    an official declaration.
+ *
+ *    This is your unofficial assurance that libpng from version 0.71 and
+ *    upward through 1.6.22 are Y2K compliant.  It is my belief that
+ *    earlier versions were also Y2K compliant.
+ *
+ *    Libpng only has two year fields.  One is a 2-byte unsigned integer
+ *    that will hold years up to 65535.  The other, which is deprecated,
+ *    holds the date in text format, and will hold years up to 9999.
+ *
+ *    The integer is
+ *        "png_uint_16 year" in png_time_struct.
+ *
+ *    The string is
+ *        "char time_buffer[29]" in png_struct.  This is no longer used
+ *    in libpng-1.6.x and will be removed from libpng-1.7.0.
+ *
+ *    There are seven time-related functions:
+ *        png.c: png_convert_to_rfc_1123_buffer() in png.c
+ *          (formerly png_convert_to_rfc_1123() prior to libpng-1.5.x and
+ *          png_convert_to_rfc_1152() in error prior to libpng-0.98)
+ *        png_convert_from_struct_tm() in pngwrite.c, called in pngwrite.c
+ *        png_convert_from_time_t() in pngwrite.c
+ *        png_get_tIME() in pngget.c
+ *        png_handle_tIME() in pngrutil.c, called in pngread.c
+ *        png_set_tIME() in pngset.c
+ *        png_write_tIME() in pngwutil.c, called in pngwrite.c
+ *
+ *    All handle dates properly in a Y2K environment.  The
+ *    png_convert_from_time_t() function calls gmtime() to convert from system
+ *    clock time, which returns (year - 1900), which we properly convert to
+ *    the full 4-digit year.  There is a possibility that libpng applications
+ *    are not passing 4-digit years into the png_convert_to_rfc_1123_buffer()
+ *    function, or that they are incorrectly passing only a 2-digit year
+ *    instead of "year - 1900" into the png_convert_from_struct_tm() function,
+ *    but this is not under our control.  The libpng documentation has always
+ *    stated that it works with 4-digit years, and the APIs have been
+ *    documented as such.
+ *
+ *    The tIME chunk itself is also Y2K compliant.  It uses a 2-byte unsigned
+ *    integer to hold the year, and can hold years as large as 65535.
+ *
+ *    zlib, upon which libpng depends, is also Y2K compliant.  It contains
+ *    no date-related code.
+ *
+ *       Glenn Randers-Pehrson
+ *       libpng maintainer
+ *       PNG Development Group
+ */
+
+
+
+libtiff (third_party/libtiff/tiffio.h)
+/* $Id: tiffio.h,v 1.94 2017-01-11 19:02:49 erouault Exp $ */
+
+/*
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
+ *
+ * Permission to use, copy, modify, distribute, and sell this software and
+ * its documentation for any purpose is hereby granted without fee, provided
+ * that (i) the above copyright notices and this permission notice appear in
+ * all copies of the software and related documentation, and (ii) the names of
+ * Sam Leffler and Silicon Graphics may not be used in any advertising or
+ * publicity relating to the software without the specific, prior written
+ * permission of Sam Leffler and Silicon Graphics.
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+ * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+ * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * OF THIS SOFTWARE.
+ */
+
+
+
+FreeType FTL
+                    The FreeType Project LICENSE
+                    ----------------------------
+
+                            2006-Jan-27
+
+                    Copyright 1996-2002, 2006 by
+          David Turner, Robert Wilhelm, and Werner Lemberg
+
+
+
+Introduction
+============
+
+  The FreeType  Project is distributed in  several archive packages;
+  some of them may contain, in addition to the FreeType font engine,
+  various tools and  contributions which rely on, or  relate to, the
+  FreeType Project.
+
+  This  license applies  to all  files found  in such  packages, and
+  which do not  fall under their own explicit  license.  The license
+  affects  thus  the  FreeType   font  engine,  the  test  programs,
+  documentation and makefiles, at the very least.
+
+  This  license   was  inspired  by  the  BSD,   Artistic,  and  IJG
+  (Independent JPEG  Group) licenses, which  all encourage inclusion
+  and  use of  free  software in  commercial  and freeware  products
+  alike.  As a consequence, its main points are that:
+
+    o We don't promise that this software works. However, we will be
+      interested in any kind of bug reports. (`as is' distribution)
+
+    o You can  use this software for whatever you  want, in parts or
+      full form, without having to pay us. (`royalty-free' usage)
+
+    o You may not pretend that  you wrote this software.  If you use
+      it, or  only parts of it,  in a program,  you must acknowledge
+      somewhere  in  your  documentation  that  you  have  used  the
+      FreeType code. (`credits')
+
+  We  specifically  permit  and  encourage  the  inclusion  of  this
+  software, with  or without modifications,  in commercial products.
+  We  disclaim  all warranties  covering  The  FreeType Project  and
+  assume no liability related to The FreeType Project.
+
+
+  Finally,  many  people  asked  us  for  a  preferred  form  for  a
+  credit/disclaimer to use in compliance with this license.  We thus
+  encourage you to use the following text:
+
+   """
+    Portions of this software are copyright © <year> The FreeType
+    Project (www.freetype.org).  All rights reserved.
+   """
+
+  Please replace <year> with the value from the FreeType version you
+  actually use.
+
+
+Legal Terms
+===========
+
+0. Definitions
+--------------
+
+  Throughout this license,  the terms `package', `FreeType Project',
+  and  `FreeType  archive' refer  to  the  set  of files  originally
+  distributed  by the  authors  (David Turner,  Robert Wilhelm,  and
+  Werner Lemberg) as the `FreeType Project', be they named as alpha,
+  beta or final release.
+
+  `You' refers to  the licensee, or person using  the project, where
+  `using' is a generic term including compiling the project's source
+  code as  well as linking it  to form a  `program' or `executable'.
+  This  program is  referred to  as  `a program  using the  FreeType
+  engine'.
+
+  This  license applies  to all  files distributed  in  the original
+  FreeType  Project,   including  all  source   code,  binaries  and
+  documentation,  unless  otherwise  stated   in  the  file  in  its
+  original, unmodified form as  distributed in the original archive.
+  If you are  unsure whether or not a particular  file is covered by
+  this license, you must contact us to verify this.
+
+  The FreeType  Project is copyright (C) 1996-2000  by David Turner,
+  Robert Wilhelm, and Werner Lemberg.  All rights reserved except as
+  specified below.
+
+1. No Warranty
+--------------
+
+  THE FREETYPE PROJECT  IS PROVIDED `AS IS' WITHOUT  WARRANTY OF ANY
+  KIND, EITHER  EXPRESS OR IMPLIED,  INCLUDING, BUT NOT  LIMITED TO,
+  WARRANTIES  OF  MERCHANTABILITY   AND  FITNESS  FOR  A  PARTICULAR
+  PURPOSE.  IN NO EVENT WILL ANY OF THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE  FOR ANY DAMAGES CAUSED  BY THE USE OR  THE INABILITY TO
+  USE, OF THE FREETYPE PROJECT.
+
+2. Redistribution
+-----------------
+
+  This  license  grants  a  worldwide, royalty-free,  perpetual  and
+  irrevocable right  and license to use,  execute, perform, compile,
+  display,  copy,   create  derivative  works   of,  distribute  and
+  sublicense the  FreeType Project (in  both source and  object code
+  forms)  and  derivative works  thereof  for  any  purpose; and  to
+  authorize others  to exercise  some or all  of the  rights granted
+  herein, subject to the following conditions:
+
+    o Redistribution of  source code  must retain this  license file
+      (`FTL.TXT') unaltered; any  additions, deletions or changes to
+      the original  files must be clearly  indicated in accompanying
+      documentation.   The  copyright   notices  of  the  unaltered,
+      original  files must  be  preserved in  all  copies of  source
+      files.
+
+    o Redistribution in binary form must provide a  disclaimer  that
+      states  that  the software is based in part of the work of the
+      FreeType Team,  in  the  distribution  documentation.  We also
+      encourage you to put an URL to the FreeType web page  in  your
+      documentation, though this isn't mandatory.
+
+  These conditions  apply to any  software derived from or  based on
+  the FreeType Project,  not just the unmodified files.   If you use
+  our work, you  must acknowledge us.  However, no  fee need be paid
+  to us.
+
+3. Advertising
+--------------
+
+  Neither the  FreeType authors and  contributors nor you  shall use
+  the name of the  other for commercial, advertising, or promotional
+  purposes without specific prior written permission.
+
+  We suggest,  but do not require, that  you use one or  more of the
+  following phrases to refer  to this software in your documentation
+  or advertising  materials: `FreeType Project',  `FreeType Engine',
+  `FreeType library', or `FreeType Distribution'.
+
+  As  you have  not signed  this license,  you are  not  required to
+  accept  it.   However,  as  the FreeType  Project  is  copyrighted
+  material, only  this license, or  another one contracted  with the
+  authors, grants you  the right to use, distribute,  and modify it.
+  Therefore,  by  using,  distributing,  or modifying  the  FreeType
+  Project, you indicate that you understand and accept all the terms
+  of this license.
+
+4. Contacts
+-----------
+
+  There are two mailing lists related to FreeType:
+
+    o freetype@nongnu.org
+
+      Discusses general use and applications of FreeType, as well as
+      future and  wanted additions to the  library and distribution.
+      If  you are looking  for support,  start in  this list  if you
+      haven't found anything to help you in the documentation.
+
+    o freetype-devel@nongnu.org
+
+      Discusses bugs,  as well  as engine internals,  design issues,
+      specific licenses, porting, etc.
+
+  Our home page can be found at
+
+    https://www.freetype.org
+
+
+--- end of FTL.TXT ---

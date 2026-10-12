@@ -6,6 +6,12 @@
 - 打印端：发现管理端、校验与下载资料，在离线状态下搜索、预览和打印已有 PDF。
 - 软件版本更新与资料版本更新分开管理。
 
+## 下载公开版
+
+[GitHub Releases](https://github.com/matt-xb/ccc-print-system-open-source/releases) 提供 Windows x64 管理端和打印端 ZIP，以及打印端安装器。完整解压后运行带“公开版”的 EXE，无需另装 .NET 运行时。首次发行标为预发布，尚未完成干净电脑安装和实体打印验收；程序未签名。
+
+公开版使用独立的程序名、安装目录和本地缓存，不读取公司版缓存。管理端默认读取包内 `资料` 目录，请在运行前将 `SourcePath` 配置为自己的绝对路径；打印端将 `ServerDeviceName` 从 `YOUR-ADMIN-PC` 改为管理端电脑名。默认端口为 8010/8011，同机运行其他管理端时需配置未占用端口。
+
 ## 构建
 
 安装 .NET 9 SDK，在 Windows 上运行：
@@ -15,7 +21,7 @@ dotnet build CccPrint.slnx -c Release
 .\scripts\publish.ps1
 ```
 
-管理端和打印端输出到 `dist/0.6.29/admin` 与 `dist/0.6.29/client`。打印所需 PDFium 从声明的 NuGet 依赖获取，不在本仓库重新分发原生 DLL。
+管理端和打印端输出到 `dist/0.6.29/admin` 与 `dist/0.6.29/client`。打印所需 PDFium 从声明的 NuGet 依赖获取，源码库不保存原生 DLL；运行包包含 PDFium 和对应许可。
 
 生成打印端安装器还需安装 Inno Setup 7：
 
@@ -23,9 +29,11 @@ dotnet build CccPrint.slnx -c Release
 .\scripts\build-client-installer.ps1
 ```
 
+运行 `.\scripts\package-release.ps1` 同时生成两端 ZIP 和打印端安装器；ZIP 采用明确的文件清单，不复制本地运行数据或调试文件。
+
 ## 使用自己的资料
 
-运行前按自己的环境修改管理端 `appsettings.json` 中的 `SourcePath`、服务器地址等设置；不要直接使用示例中的公司路径。首次运行不会携带任何业务资料。
+运行前按自己的环境修改管理端 `appsettings.json` 中的 `SourcePath`、服务器地址等设置。首次运行不会携带任何业务资料。
 
 Word/Excel 原件保留在管理端；用户确认后发布的 PDF 才同步到打印端。打印端自动发现使用 UDP 8011，资料服务默认 HTTP 8010；在自己的局域网配置相应访问权限。
 

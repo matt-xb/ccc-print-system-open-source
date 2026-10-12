@@ -14,9 +14,9 @@ namespace CccPrint;
 public partial class App : Application
 {
     private const string SingleInstanceMutexName =
-        @"Local\CCCPrint.Admin.SingleInstance";
+        @"Local\CCCPrint.Public.Admin.SingleInstance";
     private const string ActivationEventName =
-        @"Local\CCCPrint.Admin.Activate";
+        @"Local\CCCPrint.Public.Admin.Activate";
     private UpdateServer? _server;
     private DiscoveryResponder? _discoveryResponder;
     private MainWindow? _mainWindow;

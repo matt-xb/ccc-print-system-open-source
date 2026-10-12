@@ -9,7 +9,7 @@ public sealed class ServerSettingsStore
 {
     private readonly string _settingsPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "CCC资料打印系统",
+        "CCC资料打印系统公开版",
         "打印端",
         "server.json");
 
