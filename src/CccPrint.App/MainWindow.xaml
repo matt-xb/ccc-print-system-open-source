@@ -1,0 +1,1041 @@
+<Window x:Class="CccPrint.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CCC 资料管理端"
+        Width="1380"
+        Height="880"
+        MinWidth="1120"
+        MinHeight="720"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F7F6"
+        FontFamily="Microsoft YaHei UI"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <SolidColorBrush x:Key="Ink" Color="#142B3A"/>
+        <SolidColorBrush x:Key="Muted" Color="#657781"/>
+        <SolidColorBrush x:Key="Line" Color="#D9E3E1"/>
+        <SolidColorBrush x:Key="Green" Color="#19785A"/>
+        <SolidColorBrush x:Key="Orange" Color="#D76532"/>
+        <SolidColorBrush x:Key="Blue" Color="#2D72A4"/>
+
+        <Style x:Key="Panel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Line}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="14"/>
+        </Style>
+
+        <Style x:Key="ButtonBase" TargetType="Button">
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="MinHeight" Value="36"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+            <Setter Property="BorderBrush" Value="#C5D2CF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface" Property="Background" Value="#EDF4F2"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Surface" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Surface" Property="Opacity" Value="0.35"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButton"
+               TargetType="Button"
+               BasedOn="{StaticResource ButtonBase}">
+            <Setter Property="Background" Value="{StaticResource Green}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Green}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface" Property="Background" Value="#126548"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Surface" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Surface" Property="Opacity" Value="0.35"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ManagementNavButton" TargetType="Button">
+            <Setter Property="Padding" Value="18,9"/>
+            <Setter Property="MinHeight" Value="38"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface" Property="Background" Value="#F7FAF9"/>
+                                <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Surface" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Surface" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ManagementNavActiveButton"
+               TargetType="Button"
+               BasedOn="{StaticResource ManagementNavButton}">
+            <Setter Property="Background" Value="{StaticResource Ink}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface" Property="Background" Value="#24495A"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Surface" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Surface" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="Surface"
+                                Padding="10,8"
+                                Background="Transparent"
+                                CornerRadius="8">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface" Property="Background" Value="#F0F5F3"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Surface" Property="Background" Value="#E3F0EB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="PageRoot" Opacity="0">
+        <Grid.RenderTransform>
+            <TranslateTransform x:Name="PageTranslate" Y="8"/>
+        </Grid.RenderTransform>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="76"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="38"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="White"
+                BorderBrush="{StaticResource Line}"
+                BorderThickness="0,0,0,1">
+            <Grid Margin="26,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="42" Height="42" CornerRadius="10" Background="{StaticResource Ink}">
+                        <TextBlock Text="CCC"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="White"
+                                   FontFamily="Bahnschrift"
+                                   FontWeight="SemiBold"
+                                   FontSize="11"/>
+                    </Border>
+                    <StackPanel Margin="13,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="仓库资料管理"
+                                   Foreground="{StaticResource Ink}"
+                                   FontFamily="Segoe UI Semibold"
+                                   FontSize="22"/>
+                    </StackPanel>
+                </StackPanel>
+                <Border Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Padding="4"
+                        Background="#EAF0EF"
+                        CornerRadius="11">
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="LibraryPageButton"
+                                Style="{StaticResource ManagementNavActiveButton}"
+                                Content="资料柜"
+                                Click="LibraryPageButton_Click"/>
+                        <Button x:Name="ChangesPageButton"
+                                Margin="3,0,0,0"
+                                Style="{StaticResource ManagementNavButton}"
+                                Content="资料变更"
+                                Click="ChangesPageButton_Click"/>
+                        <Button x:Name="PublishPageButton"
+                                Margin="3,0,0,0"
+                                Style="{StaticResource ManagementNavButton}"
+                                Content="发布中心"
+                                Click="PublishPageButton_Click"/>
+                    </StackPanel>
+                </Border>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Padding="13,7" Background="#EEF6F2" CornerRadius="16">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse x:Name="ServerStatusDot"
+                                     Width="8" Height="8"
+                                     Fill="#C18A2C"
+                                     VerticalAlignment="Center"/>
+                            <TextBlock x:Name="ServerStatusText"
+                                       Margin="8,0,0,0"
+                                       Text="服务正在启动"
+                                       Foreground="#3E765F"
+                                       FontSize="11.5"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="24,18">
+            <Border x:Name="LibraryPage"
+                    Style="{StaticResource Panel}"
+                    Padding="22">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="资料柜"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource Ink}"
+                                       FontFamily="Segoe UI Semibold"
+                                       FontSize="17"/>
+                            <Button x:Name="CurrentLibraryViewButton"
+                                    Margin="16,0,0,0"
+                                    Padding="12,6"
+                                    MinHeight="30"
+                                    Style="{StaticResource ButtonBase}"
+                                    Background="{StaticResource Ink}"
+                                    Foreground="White"
+                                    BorderBrush="{StaticResource Ink}"
+                                    Content="当前资料"
+                                    Click="CurrentLibraryViewButton_Click"/>
+                            <Button x:Name="HistoryLibraryViewButton"
+                                    Margin="6,0,0,0"
+                                    Padding="12,6"
+                                    MinHeight="30"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="历史存档"
+                                    Click="HistoryLibraryViewButton_Click"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Padding="10,5" Background="#EEF4F8" CornerRadius="12">
+                            <TextBlock x:Name="PublishedCountText"
+                                       Foreground="{StaticResource Blue}"
+                                       FontWeight="SemiBold"
+                                       Text="0 份 PDF"/>
+                        </Border>
+                    </Grid>
+
+                    <Grid Grid.Row="1"
+                          x:Name="CurrentLibraryView"
+                          Margin="0,12,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Height="36"
+                                    BorderBrush="{StaticResource Line}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Background="#FAFCFC">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="34"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="32"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="&#xE721;"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               Foreground="{StaticResource Muted}"/>
+                                    <TextBox Grid.Column="1"
+                                             x:Name="PublishedSearchBox"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             VerticalContentAlignment="Center"
+                                             FontSize="12"
+                                             TextChanged="PublishedSearchBox_TextChanged"/>
+                                    <TextBlock Grid.Column="1"
+                                               x:Name="PublishedSearchPlaceholder"
+                                               IsHitTestVisible="False"
+                                               VerticalAlignment="Center"
+                                               Foreground="#8A999F"
+                                               FontSize="12"
+                                               Text="搜索资料、子表或分组"/>
+                                    <Button Grid.Column="2"
+                                            x:Name="ClearPublishedSearchButton"
+                                            Padding="0"
+                                            MinHeight="28"
+                                            Style="{StaticResource ButtonBase}"
+                                            BorderThickness="0"
+                                            Background="Transparent"
+                                            FontFamily="Segoe MDL2 Assets"
+                                            Content="&#xE711;"
+                                            ToolTip="清空搜索"
+                                            Visibility="Collapsed"
+                                            Click="ClearPublishedSearchButton_Click"/>
+                                </Grid>
+                            </Border>
+                            <ComboBox Grid.Column="2"
+                                      x:Name="PublishedScopeSelector"
+                                      Height="36"
+                                      DisplayMemberPath="Name"
+                                      VerticalContentAlignment="Center"
+                                      SelectionChanged="PublishedScopeSelector_SelectionChanged"/>
+                        </Grid>
+                        <Grid Grid.Row="1" Margin="0,9,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock x:Name="PublishedVersionText"
+                                           Foreground="{StaticResource Blue}"
+                                           FontSize="11.5"
+                                           FontWeight="SemiBold"
+                                           Text="尚未正式发布"/>
+                                <TextBlock x:Name="PublishedSummaryText"
+                                           Margin="0,3,0,0"
+                                           Foreground="{StaticResource Muted}"
+                                           FontSize="10.5"
+                                           TextTrimming="CharacterEllipsis"
+                                           Text="等待读取仓库资料"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Padding="9,5"
+                                    MinHeight="28"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="全部收起"
+                                    ToolTip="收起所有资料层级"
+                                    Click="CollapsePublishedTreeButton_Click"/>
+                        </Grid>
+                        <TreeView Grid.Row="2"
+                                  x:Name="PublishedTree"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  SelectedItemChanged="PublishedTree_SelectedItemChanged"
+                                  MouseDoubleClick="PublishedTree_MouseDoubleClick">
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="TreeViewItem">
+                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+                                    <Setter Property="Padding" Value="2"/>
+                                    <Setter Property="Margin" Value="0,0,0,2"/>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                    <Grid Margin="{Binding IndentMargin}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox Margin="0,0,7,0"
+                                                  VerticalAlignment="Center"
+                                                  IsChecked="{Binding IsRemovalSelected, Mode=TwoWay}"
+                                                  Visibility="{Binding RemovalSelectionVisibility}"
+                                                  ToolTip="选择后可批量从仓库资料中移除"
+                                                  Click="PublishedRemovalCheckBox_Click"/>
+                                        <Border Grid.Column="1"
+                                                Width="{Binding IconSize}"
+                                                Height="{Binding IconSize}"
+                                                CornerRadius="5"
+                                                Background="{Binding IconBackground}">
+                                            <TextBlock Text="{Binding IconLabel}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="{Binding IconForeground}"
+                                                       FontFamily="Bahnschrift"
+                                                       FontSize="{Binding IconFontSize}"
+                                                       FontWeight="Bold"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="2"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DisplayName}"
+                                                       Foreground="{StaticResource Ink}"
+                                                       FontSize="12"
+                                                       FontWeight="{Binding FontWeight}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding Detail}"
+                                                       Margin="0,1,0,0"
+                                                       Foreground="{StaticResource Muted}"
+                                                       FontSize="9.5"
+                                                       Visibility="{Binding DetailVisibility}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="3"
+                                                   Margin="8,0,4,0"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{Binding MetaForeground}"
+                                                   FontSize="10"
+                                                   FontWeight="SemiBold"
+                                                   Text="{Binding MetaLabel}"/>
+                                    </Grid>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                        <TextBlock Grid.Row="2"
+                                   x:Name="EmptyPublishedText"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Muted}"
+                                   Text="没有找到符合条件的资料。"/>
+                        <Grid Grid.Row="3" Margin="0,9,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <WrapPanel>
+                                <Button x:Name="PreviewPublishedButton"
+                                        Style="{StaticResource ButtonBase}"
+                                        Content="打开 PDF"
+                                        IsEnabled="False"
+                                        Click="PreviewPublishedButton_Click"/>
+                                <Button x:Name="RemovePublishedButton"
+                                        Margin="7,0,0,0"
+                                        Style="{StaticResource ButtonBase}"
+                                        Foreground="#A84E3D"
+                                        BorderBrush="#E1B9B0"
+                                        Content="移除已选"
+                                        IsEnabled="False"
+                                        Click="RemovePublishedButton_Click"/>
+                            </WrapPanel>
+                            <Grid Grid.Row="1" Margin="0,7,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center"
+                                           Foreground="{StaticResource Muted}"
+                                           FontSize="11"
+                                           Text="移动到"/>
+                                <ComboBox Grid.Column="1"
+                                          x:Name="PublishedMoveGroupSelector"
+                                          Height="34"
+                                          Margin="8,0"
+                                          IsEditable="True"
+                                          IsTextSearchEnabled="True"
+                                          VerticalContentAlignment="Center"
+                                          ToolTip="选择已有分组或输入新分组"/>
+                                <Button Grid.Column="2"
+                                        x:Name="MovePublishedGroupButton"
+                                        Style="{StaticResource ButtonBase}"
+                                        Content="移动分组"
+                                        IsEnabled="False"
+                                        Click="MovePublishedGroupButton_Click"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Row="1"
+                          x:Name="HistoryLibraryView"
+                          Margin="0,12,0,0"
+                          Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="自动保留最近 30 个版本和最近 12 个发布月份的月末版本"
+                                           Foreground="{StaticResource Ink}"
+                                           FontWeight="SemiBold"/>
+                                <TextBlock Text="恢复存档会生成一个新的正式版本；超出保留范围的旧存档将自动清理，源 Word、Excel 不会改变。"
+                                           Margin="0,3,0,0"
+                                           Foreground="{StaticResource Muted}"
+                                           FontSize="10.5"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="1"
+                                       x:Name="PublishedHistoryCountText"
+                                       Margin="10,0,0,0"
+                                       VerticalAlignment="Top"
+                                       Foreground="{StaticResource Blue}"
+                                       FontWeight="SemiBold"
+                                       Text="0 个版本"/>
+                        </Grid>
+                        <ListView Grid.Row="1"
+                                  x:Name="PublishedHistoryList"
+                                  Margin="0,10,0,0"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  SelectionChanged="PublishedHistoryList_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="92"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding DateLabel}"
+                                                       Foreground="{StaticResource Ink}"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding TimeLabel}"
+                                                       Margin="0,2,0,0"
+                                                       Foreground="{StaticResource Muted}"
+                                                       FontFamily="Bahnschrift"
+                                                       FontSize="10.5"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding Notice}"
+                                                       Foreground="{StaticResource Ink}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding Summary}"
+                                                       Margin="0,3,0,0"
+                                                       Foreground="{StaticResource Muted}"
+                                                       FontSize="10.5"/>
+                                        </StackPanel>
+                                        <Border Grid.Column="2"
+                                                Margin="8,0,0,0"
+                                                Padding="8,4"
+                                                VerticalAlignment="Center"
+                                                Background="{Binding BadgeBackground}"
+                                                CornerRadius="10">
+                                            <TextBlock Text="{Binding StateLabel}"
+                                                       Foreground="{Binding BadgeForeground}"
+                                                       FontSize="10"
+                                                       FontWeight="SemiBold"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Grid Grid.Row="2" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="PublishedHistorySelectionText"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource Muted}"
+                                       FontSize="10.5"
+                                       Text="选择一个历史版本"/>
+                            <Button Grid.Column="1"
+                                    x:Name="OpenPublishedArchiveButton"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="查看版本资料"
+                                    IsEnabled="False"
+                                    Click="OpenPublishedArchiveButton_Click"/>
+                            <Button Grid.Column="3"
+                                    x:Name="RestorePublishedArchiveButton"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Content="恢复为当前版本"
+                                    IsEnabled="False"
+                                    Click="RestorePublishedArchiveButton_Click"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border x:Name="ChangesPage"
+                    Style="{StaticResource Panel}"
+                    Padding="22"
+                    Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                            <TextBlock Text="源资料变化"
+                                       Foreground="{StaticResource Ink}"
+                                       FontFamily="Segoe UI Semibold"
+                                       FontSize="17"/>
+                            <TextBlock Text="先指定资料去向，再选择要新增或替换的文件"
+                                       Margin="0,4,0,0"
+                                       Foreground="{StaticResource Muted}"
+                                       FontSize="11"/>
+                            </StackPanel>
+                            <Button x:Name="RefreshButton"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="刷新文件变化"
+                                    ToolTip="在 WPS 或文件夹中修改资料后点击"
+                                    Click="RefreshButton_Click"/>
+                        </Grid>
+                        <Grid Grid.Row="1" Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="145"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock VerticalAlignment="Center"
+                                       Foreground="{StaticResource Muted}"
+                                       FontSize="11"
+                                       Text="资料库"/>
+                            <ComboBox x:Name="ImportLibrarySelector"
+                                      Grid.Column="1"
+                                      Margin="8,0,0,0"
+                                      Height="34"
+                                      VerticalContentAlignment="Center"
+                                      DisplayMemberPath="Name"
+                                      SelectionChanged="ImportDestinationSelector_SelectionChanged"/>
+                            <TextBlock Grid.Column="3"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource Muted}"
+                                       FontSize="11"
+                                       Text="分类"/>
+                            <ComboBox x:Name="ImportCategorySelector"
+                                      Grid.Column="4"
+                                      Margin="8,0,0,0"
+                                      Height="34"
+                                      VerticalContentAlignment="Center"
+                                      DisplayMemberPath="Name"
+                                      SelectionChanged="ImportDestinationSelector_SelectionChanged"/>
+                            <StackPanel x:Name="ImportWorkshopGroupPanel"
+                                        Grid.Column="6"
+                                        Orientation="Horizontal"
+                                        Visibility="Collapsed">
+                                <TextBlock VerticalAlignment="Center"
+                                           Foreground="{StaticResource Muted}"
+                                           FontSize="11"
+                                           Text="分组"/>
+                                <ComboBox x:Name="ImportWorkshopGroupSelector"
+                                          Width="112"
+                                          Margin="8,0,0,0"
+                                          Height="34"
+                                          VerticalContentAlignment="Center"
+                                          DisplayMemberPath="Name"/>
+                                <Button x:Name="MoveSelectedToWorkshopGroupButton"
+                                        Margin="8,0,0,0"
+                                        Style="{StaticResource ButtonBase}"
+                                        Content="移到此分组"
+                                        Click="MoveSelectedToGroupButton_Click"/>
+                            </StackPanel>
+                            <StackPanel x:Name="ImportCustomGroupPanel"
+                                        Grid.Column="6"
+                                        Orientation="Horizontal"
+                                        Visibility="Collapsed">
+                                <TextBlock VerticalAlignment="Center"
+                                           Foreground="{StaticResource Muted}"
+                                           FontSize="11"
+                                           Text="分组"/>
+                                <ComboBox x:Name="ImportCustomGroupSelector"
+                                          Width="112"
+                                          Margin="8,0,0,0"
+                                          Height="34"
+                                          IsEditable="True"
+                                          IsTextSearchEnabled="True"
+                                          VerticalContentAlignment="Center"/>
+                                <Button x:Name="MoveSelectedToGroupButton"
+                                        Margin="8,0,0,0"
+                                        Style="{StaticResource ButtonBase}"
+                                        Content="移到此分组"
+                                        Click="MoveSelectedToGroupButton_Click"/>
+                            </StackPanel>
+                            <Button x:Name="ChooseSourceFilesButton"
+                                    Grid.Column="8"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Content="选择资料文件"
+                                    ToolTip="支持 Word、Excel 和 PDF"
+                                    Click="ChooseSourceFilesButton_Click"/>
+                        </Grid>
+                    </Grid>
+                    <TextBlock Grid.Row="1"
+                               x:Name="ChangeSummaryText"
+                               Margin="0,12,0,10"
+                               Foreground="{StaticResource Muted}"
+                               Text="正在扫描…"/>
+                    <ListView Grid.Row="2"
+                              x:Name="ChangesList"
+                              BorderThickness="0"
+                              Background="Transparent">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox IsChecked="{Binding IsSelected}"
+                                              IsEnabled="{Binding CanSelect}"
+                                              VerticalAlignment="Center"
+                                              Click="ChangeCheckBox_Click"/>
+                                    <Border Grid.Column="1"
+                                            HorizontalAlignment="Left"
+                                            Padding="8,4"
+                                            Background="{Binding BadgeBackground}"
+                                            CornerRadius="10">
+                                        <TextBlock Text="{Binding KindLabel}"
+                                                   Foreground="{Binding BadgeForeground}"
+                                                   FontSize="10.5"
+                                                   FontWeight="SemiBold"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="{Binding FileName}"
+                                                   Foreground="{StaticResource Ink}"
+                                                   FontWeight="SemiBold"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding DestinationLabel}"
+                                                   Margin="0,3,0,0"
+                                                   Foreground="#19785A"
+                                                   FontSize="10.5"
+                                                   FontWeight="SemiBold"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   ToolTip="{Binding RelativePath}"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="3"
+                                            Margin="10,0,0,0"
+                                            Padding="10,5"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource ButtonBase}"
+                                            Content="{Binding ActionLabel}"
+                                            Foreground="{Binding ActionForeground}"
+                                            Click="DismissSourceChangeButton_Click"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <TextBlock Grid.Row="2"
+                               x:Name="NoChangesText"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource Muted}"
+                               Text="源资料没有待处理变化。"/>
+                    <Grid Grid.Row="3" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="SelectAllChangesButton"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="全选可处理项"
+                                    Click="SelectAllChangesButton_Click"/>
+                            <Button x:Name="ClearPendingChangesButton"
+                                    Margin="8,0,0,0"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="清空待处理"
+                                    Foreground="#AE4936"
+                                    Click="ClearPendingChangesButton_Click"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1"
+                                   x:Name="PrepareHintText"
+                                   Margin="12,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Muted}"
+                                   FontSize="11"
+                                   Visibility="Collapsed"/>
+                        <Button Grid.Column="2"
+                                x:Name="PrepareDraftButton"
+                                Style="{StaticResource PrimaryButton}"
+                                Content="生成发布内容"
+                                IsEnabled="False"
+                                Click="PrepareDraftButton_Click"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border x:Name="PublishPage"
+                    Style="{StaticResource Panel}"
+                    Padding="22"
+                    Visibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.25*"/>
+                        <ColumnDefinition Width="18"/>
+                        <ColumnDefinition Width="0.75*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="300"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="本次准备发布"
+                                           Foreground="{StaticResource Ink}"
+                                           FontFamily="Segoe UI Semibold"
+                                           FontSize="17"/>
+                                <TextBlock x:Name="DraftSummaryText"
+                                           Margin="0,4,0,0"
+                                           Foreground="{StaticResource Muted}"
+                                           FontSize="11"
+                                           Text="选择变化并生成 PDF 后，会在这里看到最终结果。"/>
+                            </StackPanel>
+                            <ComboBox Grid.Column="1"
+                                      x:Name="BatchSelector"
+                                      Height="36"
+                                      VerticalContentAlignment="Center"
+                                      DisplayMemberPath="DisplayText"
+                                      SelectionChanged="BatchSelector_SelectionChanged"/>
+                        </Grid>
+                        <ListView Grid.Row="1"
+                                  x:Name="DraftOutputsList"
+                                  Margin="0,9,0,0"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  SelectionChanged="DraftOutputsList_SelectionChanged"
+                                  MouseDoubleClick="DraftOutputsList_MouseDoubleClick">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="64"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox VerticalAlignment="Center"
+                                                  IsChecked="{Binding IsIncluded, Mode=TwoWay}"
+                                                  IsEnabled="{Binding CanChoose}"
+                                                  Visibility="{Binding SelectionVisibility}"
+                                                  ToolTip="只发布勾选的子表"
+                                                  Click="DraftOutputCheckBox_Click"/>
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding ActionLabel}"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{Binding ActionForeground}"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="10.5"/>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="{Binding DisplayName}"
+                                                       Foreground="{StaticResource Ink}"
+                                                       FontWeight="SemiBold"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding Detail}"
+                                                       Margin="0,2,0,0"
+                                                       Foreground="{StaticResource Muted}"
+                                                       FontSize="10.5"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="3"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{StaticResource Muted}"
+                                                   FontSize="10.5"
+                                                   Text="{Binding Meta}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <TextBlock Grid.Row="1"
+                                   x:Name="EmptyDraftText"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Muted}"
+                                   Text="还没有准备发布内容。"/>
+                        <StackPanel Grid.Row="2"
+                                    Margin="0,8,0,0"
+                                    Orientation="Horizontal">
+                            <Button x:Name="PreviewDraftButton"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="预览所选 PDF"
+                                    IsEnabled="False"
+                                    Click="PreviewDraftButton_Click"/>
+                            <Button x:Name="SelectAllDraftOutputsButton"
+                                    Margin="8,0,0,0"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="全选子表"
+                                    Click="SelectAllDraftOutputsButton_Click"/>
+                            <Button x:Name="ClearDraftOutputsButton"
+                                    Margin="8,0,0,0"
+                                    Style="{StaticResource ButtonBase}"
+                                    Content="全部取消"
+                                    Click="ClearDraftOutputsButton_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Grid.Column="2"
+                            Padding="18"
+                            Background="#F4F8F6"
+                            BorderBrush="#D5E3DD"
+                            BorderThickness="1"
+                            CornerRadius="12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="发布到仓库"
+                                       Foreground="{StaticResource Ink}"
+                                       FontFamily="Segoe UI Semibold"
+                                       FontSize="17"/>
+                            <Border Grid.Row="1"
+                                    Margin="0,9,0,10"
+                                    Padding="9,7"
+                                    Background="#E3F1EB"
+                                    CornerRadius="8">
+                                <TextBlock x:Name="PublishDestinationsText"
+                                           Foreground="#19785A"
+                                           FontSize="11"
+                                           FontWeight="SemiBold"
+                                           TextWrapping="Wrap"
+                                           Text="资料去向：等待选择发布内容"/>
+                            </Border>
+                            <TextBox Grid.Row="2"
+                                     x:Name="ReleaseNoteBox"
+                                     MinHeight="66"
+                                     Padding="10,8"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     VerticalScrollBarVisibility="Auto"
+                                     ToolTip="例如：更新原材料台账，删除旧版作业指导书"
+                                     TextChanged="ReleaseNoteBox_TextChanged"/>
+                            <TextBlock Grid.Row="3"
+                                       x:Name="PublishBlockerText"
+                                       Margin="0,9,0,9"
+                                       Foreground="{StaticResource Orange}"
+                                       FontSize="11"
+                                       TextWrapping="Wrap"
+                                       Text="先生成本次发布内容。"/>
+                            <Button Grid.Row="4"
+                                    x:Name="PublishButton"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Content="立即发布到仓库"
+                                    IsEnabled="False"
+                                    Click="PublishButton_Click"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="2"
+                Background="#EDF2F1"
+                BorderBrush="{StaticResource Line}"
+                BorderThickness="0,1,0,0">
+            <Grid Margin="24,0">
+                <TextBlock x:Name="FooterStatusText"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource Muted}"
+                           FontSize="10.5"
+                           Text="正在读取仓库资料和源文件变化"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,927 @@
+<Window x:Class="CccPrint.Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CCC 资料打印端"
+        Width="1180"
+        Height="800"
+        MinWidth="1040"
+        MinHeight="720"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6F4"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <SolidColorBrush x:Key="InkBrush" Color="#173247"/>
+        <SolidColorBrush x:Key="MutedBrush" Color="#6C7B82"/>
+        <SolidColorBrush x:Key="LedgerBrush" Color="#147D75"/>
+        <SolidColorBrush x:Key="LineBrush" Color="#D9E0DE"/>
+
+        <Style x:Key="PlainButton" TargetType="Button">
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}"/>
+            <Setter Property="BorderBrush" Value="#C9D3D0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface"
+                                        Property="Background"
+                                        Value="#EEF5F3"/>
+                                <Setter TargetName="Surface"
+                                        Property="BorderBrush"
+                                        Value="#70A9A4"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Surface"
+                                        Property="Opacity"
+                                        Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrintButton" TargetType="Button"
+               BasedOn="{StaticResource PlainButton}">
+            <Setter Property="Background" Value="#D59A2D"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#D59A2D"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface"
+                                        Property="Background"
+                                        Value="#BC8120"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Surface"
+                                        Property="Opacity"
+                                        Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LibraryPortal" TargetType="Button">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="{StaticResource LineBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface"
+                                        Property="BorderBrush"
+                                        Value="#147D75"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DepartmentIndex" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="4,0,0,0"/>
+            <Setter Property="Padding" Value="18,14"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="IndexSurface"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="IndexSurface"
+                                        Property="Background"
+                                        Value="#EDF3F1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WorkshopTab" TargetType="Button">
+            <Setter Property="MinWidth" Value="76"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Margin" Value="0,3,7,3"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="TabSurface"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TabSurface"
+                                        Property="Background"
+                                        Value="#F1F6F4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GroupHeader" TargetType="Button">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Paper"
+                                Padding="20,17"
+                                Background="{TemplateBinding Background}"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TranslateTransform/>
+                            </Border.RenderTransform>
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Paper"
+                                        Property="Background"
+                                        Value="#F7FAF8"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Paper"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                                To="-3"
+                                                Duration="0:0:0.16"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Paper"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                                To="0"
+                                                Duration="0:0:0.14"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="QuantityButton" TargetType="Button"
+               BasedOn="{StaticResource PlainButton}">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="76"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="36"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="#FFFFFF"
+                BorderBrush="{StaticResource LineBrush}"
+                BorderThickness="0,0,0,1">
+            <Grid Margin="28,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <Border Width="40" Height="40"
+                            Background="#173247">
+                        <TextBlock Text="CCC"
+                                   Foreground="White"
+                                   FontWeight="Bold"
+                                   FontSize="11"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel Margin="12,0,0,0"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="资料打印"
+                                   FontSize="19"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource InkBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <Grid>
+                        <Button x:Name="SoftwareUpdateButton"
+                                Style="{StaticResource PlainButton}"
+                                Content="检查软件更新"
+                                IsEnabled="False"
+                                Click="SoftwareUpdateButton_Click"/>
+                        <Ellipse x:Name="SoftwareUpdateDot"
+                                 Width="9" Height="9"
+                                 Fill="#C94335"
+                                 Stroke="White"
+                                 StrokeThickness="2"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Top"
+                                 Margin="0,-3,-3,0"
+                                 Visibility="Collapsed"/>
+                    </Grid>
+                    <Button x:Name="RetryButton"
+                            Margin="9,0,0,0"
+                            Style="{StaticResource PlainButton}"
+                            Content="立即检查"
+                            Visibility="Collapsed"
+                            Click="RetryButton_Click"/>
+                </StackPanel>
+
+                <Border Grid.Column="3"
+                        Padding="13,7"
+                        Background="#EAF4EF"
+                        CornerRadius="16"
+                        VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse x:Name="ConnectionDot"
+                                 Width="7" Height="7"
+                                 Fill="#D59A2D"
+                                 VerticalAlignment="Center"/>
+                        <TextBlock x:Name="ConnectionText"
+                                   Margin="7,0,0,0"
+                                   Text="连接中"
+                                   Foreground="#28754F"
+                                   FontSize="11"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid x:Name="HomeView" Margin="42,34,42,30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <TextBlock Text="选择资料库"
+                               FontSize="31"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource InkBrush}"/>
+                </StackPanel>
+
+                <Border x:Name="TestDataBanner"
+                        Grid.Row="1"
+                        Margin="0,22,0,22"
+                        Padding="14,10"
+                        Background="#FFF4E5"
+                        BorderBrush="#ECD4AC"
+                        BorderThickness="1"
+                        Visibility="Collapsed">
+                    <TextBlock Text="当前是测试资料，请勿作为正式文件使用。"
+                               Foreground="#7E5224"/>
+                </Border>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="18"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="18"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="GasLibraryButton"
+                            Style="{StaticResource LibraryPortal}"
+                            IsEnabled="False"
+                            Click="GasLibraryButton_Click">
+                        <Grid Margin="32,30">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="1"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="CCC 燃气资料库"
+                                           FontSize="27"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource InkBrush}"/>
+                                <TextBlock x:Name="GasCountText"
+                                           Margin="0,13,0,0"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           Foreground="#C96B31"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="2"
+                                       Text="进入资料库  →"
+                                       Foreground="#C96B31"
+                                       FontWeight="SemiBold"/>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="ElectricLibraryButton"
+                            Grid.Column="2"
+                            Style="{StaticResource LibraryPortal}"
+                            IsEnabled="False"
+                            Click="ElectricLibraryButton_Click">
+                        <Grid Margin="32,30">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="1"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="电加热资料库"
+                                           FontSize="27"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource InkBrush}"/>
+                                <TextBlock x:Name="ElectricCountText"
+                                           Margin="0,13,0,0"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           Foreground="#287DB8"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="2"
+                                       Text="进入资料库  →"
+                                       Foreground="#287DB8"
+                                       FontWeight="SemiBold"/>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="GovernmentLibraryButton"
+                            Grid.Column="4"
+                            Style="{StaticResource LibraryPortal}"
+                            IsEnabled="False"
+                            Click="GovernmentLibraryButton_Click">
+                        <Grid Margin="32,30">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="1"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="政府资料库"
+                                           FontSize="27"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource InkBrush}"/>
+                                <TextBlock x:Name="GovernmentCountText"
+                                           Margin="0,13,0,0"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           Foreground="#7A5AA6"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="2"
+                                       Text="进入资料库  →"
+                                       Foreground="#7A5AA6"
+                                       FontWeight="SemiBold"/>
+                        </Grid>
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <Grid x:Name="LibraryView"
+                  Margin="28,22,28,20"
+                  Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="58"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="390"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Style="{StaticResource PlainButton}"
+                            Content="← 资料库首页"
+                            Click="BackHomeButton_Click"/>
+                    <StackPanel Grid.Column="1"
+                                Margin="18,0,0,0"
+                                VerticalAlignment="Center">
+                        <TextBlock x:Name="SelectedLibraryText"
+                                   FontSize="23"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource InkBrush}"/>
+                    </StackPanel>
+                    <Grid Grid.Column="2"
+                          Height="38"
+                          VerticalAlignment="Center">
+                        <TextBox x:Name="SearchBox"
+                                 Padding="13,8"
+                                 BorderBrush="#BFCBC8"
+                                 BorderThickness="1"
+                                 Background="#FFFFFF"
+                                 FontSize="12"
+                                 TextChanged="SearchBox_TextChanged"
+                                 KeyDown="SearchBox_KeyDown"/>
+                        <TextBlock x:Name="SearchHintText"
+                                   Margin="14,0,0,0"
+                                   Text="搜索名称、拼音或首字母，例如：铁锅 / tieguo / tg"
+                                   Foreground="#96A19F"
+                                   FontSize="11"
+                                   IsHitTestVisible="False"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="158"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="270"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Background="#FFFFFF"
+                            BorderBrush="{StaticResource LineBrush}"
+                            BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="56"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="资料索引"
+                                       Margin="20,0"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource InkBrush}"/>
+                            <StackPanel Grid.Row="1">
+                                <Button x:Name="WarehouseCategoryButton"
+                                        Style="{StaticResource DepartmentIndex}"
+                                        Click="WarehouseCategoryButton_Click">
+                                    <StackPanel>
+                                        <TextBlock x:Name="FirstCategoryNameText"
+                                                   Text="仓库" FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource InkBrush}"/>
+                                        <TextBlock x:Name="WarehouseCountText"
+                                                   Margin="0,4,0,0"
+                                                   FontSize="10.5"
+                                                   Foreground="{StaticResource MutedBrush}"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="WorkshopCategoryButton"
+                                        Style="{StaticResource DepartmentIndex}"
+                                        Click="WorkshopCategoryButton_Click">
+                                    <StackPanel>
+                                        <TextBlock x:Name="SecondCategoryNameText"
+                                                   Text="车间" FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource InkBrush}"/>
+                                        <TextBlock x:Name="WorkshopCountText"
+                                                   Margin="0,4,0,0"
+                                                   FontSize="10.5"
+                                                   Foreground="{StaticResource MutedBrush}"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="FinanceCategoryButton"
+                                        Style="{StaticResource DepartmentIndex}"
+                                        Click="FinanceCategoryButton_Click">
+                                    <StackPanel>
+                                        <TextBlock x:Name="ThirdCategoryNameText"
+                                                   Text="财务" FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource InkBrush}"/>
+                                        <TextBlock x:Name="FinanceCountText"
+                                                   Margin="0,4,0,0"
+                                                   FontSize="10.5"
+                                                   Foreground="{StaticResource MutedBrush}"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="OtherCategoryButton"
+                                        Style="{StaticResource DepartmentIndex}"
+                                        Click="OtherCategoryButton_Click">
+                                    <StackPanel>
+                                        <TextBlock x:Name="FourthCategoryNameText"
+                                                   Text="其余资料" FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource InkBrush}"/>
+                                        <TextBlock x:Name="OtherCountText"
+                                                   Margin="0,4,0,0"
+                                                   FontSize="10.5"
+                                                   Foreground="{StaticResource MutedBrush}"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="2"
+                            Background="#FFFFFF"
+                            BorderBrush="{StaticResource LineBrush}"
+                            BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="48"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Margin="18,0">
+                                <TextBlock x:Name="SelectedDepartmentText"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource InkBrush}"/>
+                                <TextBlock x:Name="VisibleCountText"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="11"/>
+                            </Grid>
+
+                            <Border x:Name="SubcategoryBar"
+                                    Grid.Row="1"
+                                    Margin="18,0"
+                                    BorderBrush="{StaticResource LineBrush}"
+                                    BorderThickness="0,1,0,0"
+                                    Visibility="Collapsed">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                              VerticalScrollBarVisibility="Disabled">
+                                    <StackPanel x:Name="SubcategoryTabsPanel"
+                                                AllowDrop="True"
+                                                Drop="SubcategoryTabsPanel_Drop"
+                                                Orientation="Horizontal"/>
+                                </ScrollViewer>
+                            </Border>
+
+                            <Grid Grid.Row="2">
+                                <ListBox x:Name="GroupsList"
+                                         Margin="12,0,12,12"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         ScrollViewer.CanContentScroll="True"
+                                         VirtualizingPanel.IsVirtualizing="True"
+                                         VirtualizingPanel.VirtualizationMode="Recycling"
+                                         VirtualizingPanel.ScrollUnit="Pixel">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalContentAlignment"
+                                                    Value="Stretch"/>
+                                            <Setter Property="Focusable"
+                                                    Value="False"/>
+                                            <Setter Property="IsTabStop"
+                                                    Value="False"/>
+                                            <Setter Property="Padding"
+                                                    Value="0"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Margin="0,0,0,10"
+                                                        Background="#FFFFFF"
+                                                        BorderBrush="#D7DFDD"
+                                                        BorderThickness="1">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
+                                                        </Grid.RowDefinitions>
+                                                        <ContentControl Content="{Binding SingleItem}"
+                                                                        Visibility="{Binding IsSingleItem, Converter={StaticResource BoolToVisibility}}">
+                                                            <ContentControl.ContentTemplate>
+                                                                <DataTemplate>
+                                                                    <Grid Margin="0,13">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="7"/>
+                                                                <ColumnDefinition Width="42"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="54"/>
+                                                                <ColumnDefinition Width="112"/>
+                                                                <ColumnDefinition Width="76"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border Background="#147D75"/>
+                                                            <CheckBox Grid.Column="1"
+                                                                      IsChecked="{Binding IsSelected}"
+                                                                      Click="SheetCheckBox_Click"
+                                                                      HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="2"
+                                                                        VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding Name}"
+                                                                           FontSize="15"
+                                                                           FontWeight="Bold"
+                                                                           Foreground="{StaticResource InkBrush}"/>
+                                                                <TextBlock Text="{Binding DataContext.Summary, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                                                           Margin="0,4,0,0"
+                                                                           FontSize="10.5"
+                                                                           Foreground="{StaticResource MutedBrush}"/>
+                                                            </StackPanel>
+                                                            <TextBlock Grid.Column="3"
+                                                                       Text="{Binding PageCount, StringFormat={}{0} 页}"
+                                                                       VerticalAlignment="Center"
+                                                                       Foreground="{StaticResource MutedBrush}"
+                                                                       FontSize="11"/>
+                                                            <StackPanel Grid.Column="4"
+                                                                        Orientation="Horizontal"
+                                                                        VerticalAlignment="Center">
+                                                                <Button Style="{StaticResource QuantityButton}"
+                                                                        Content="−"
+                                                                        Click="DecreaseCopiesButton_Click"/>
+                                                                <TextBox Width="42"
+                                                                         Height="28"
+                                                                         Text="{Binding Copies, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                                         TextAlignment="Center"
+                                                                         VerticalContentAlignment="Center"
+                                                                         FontFamily="Bahnschrift"
+                                                                         FontWeight="SemiBold"
+                                                                         PreviewTextInput="CopiesTextBox_PreviewTextInput"
+                                                                         DataObject.Pasting="CopiesTextBox_Pasting"
+                                                                         PreviewKeyDown="CopiesTextBox_PreviewKeyDown"
+                                                                         LostKeyboardFocus="CopiesTextBox_LostKeyboardFocus"
+                                                                         GotKeyboardFocus="CopiesTextBox_GotKeyboardFocus"/>
+                                                                <Button Style="{StaticResource QuantityButton}"
+                                                                        Content="+"
+                                                                        Click="IncreaseCopiesButton_Click"/>
+                                                            </StackPanel>
+                                                            <Button Grid.Column="5"
+                                                                    Margin="0,0,10,0"
+                                                                    Style="{StaticResource PlainButton}"
+                                                                    Content="预览"
+                                                                    Click="SheetPreviewButton_Click"/>
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </ContentControl.ContentTemplate>
+                                                        </ContentControl>
+                                                        <Button Style="{StaticResource GroupHeader}"
+                                                                Visibility="{Binding HasMultipleItems, Converter={StaticResource BoolToVisibility}}"
+                                                                Click="GroupHeaderButton_Click">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="7"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Border Background="#147D75"/>
+                                                                <StackPanel Grid.Column="1"
+                                                                            Margin="14,0,0,0">
+                                                                    <TextBlock Text="{Binding Title}"
+                                                                               FontSize="15"
+                                                                               FontWeight="Bold"
+                                                                               Foreground="{StaticResource InkBrush}"/>
+                                                                    <TextBlock Text="{Binding Summary}"
+                                                                               Margin="0,5,0,0"
+                                                                               FontSize="10.5"
+                                                                               Foreground="{StaticResource MutedBrush}"/>
+                                                                </StackPanel>
+                                                                <TextBlock Grid.Column="2"
+                                                                           Text="展开子表  ↓"
+                                                                           VerticalAlignment="Center"
+                                                                           Foreground="#147D75"
+                                                                           FontSize="11"/>
+                                                            </Grid>
+                                                        </Button>
+
+                                                        <Border Grid.Row="1"
+                                                                Background="#F7F9F7"
+                                                                BorderBrush="#DDE4E2"
+                                                                BorderThickness="0,1,0,0"
+                                                                Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibility}}">
+                                                            <ItemsControl ItemsSource="{Binding VisibleItems}">
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Grid Margin="20,10">
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="30"/>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                                <ColumnDefinition Width="54"/>
+                                                                                <ColumnDefinition Width="112"/>
+                                                                                <ColumnDefinition Width="66"/>
+                                                                            </Grid.ColumnDefinitions>
+                                                                            <CheckBox IsChecked="{Binding IsSelected}"
+                                                                                      Click="SheetCheckBox_Click"
+                                                                                      VerticalAlignment="Center"/>
+                                                                            <StackPanel Grid.Column="1">
+                                                                                <TextBlock Text="{Binding Name}"
+                                                                                           FontWeight="SemiBold"
+                                                                                           Foreground="{StaticResource InkBrush}"/>
+                                                                                <TextBlock Text="{Binding GroupTitle}"
+                                                                                           Margin="0,3,0,0"
+                                                                                           FontSize="10"
+                                                                                           Foreground="{StaticResource MutedBrush}"/>
+                                                                            </StackPanel>
+                                                                            <TextBlock Grid.Column="2"
+                                                                                       Text="{Binding PageCount, StringFormat={}{0} 页}"
+                                                                                       VerticalAlignment="Center"
+                                                                                       Foreground="{StaticResource MutedBrush}"
+                                                                                       FontSize="11"/>
+                                                                            <StackPanel Grid.Column="3"
+                                                                                        Orientation="Horizontal"
+                                                                                        VerticalAlignment="Center">
+                                                                                <Button Style="{StaticResource QuantityButton}"
+                                                                                        Content="−"
+                                                                                        Click="DecreaseCopiesButton_Click"/>
+                                                                                <TextBox Width="42"
+                                                                                         Height="28"
+                                                                                         Text="{Binding Copies, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                                                         TextAlignment="Center"
+                                                                                         VerticalContentAlignment="Center"
+                                                                                         FontFamily="Bahnschrift"
+                                                                                         FontWeight="SemiBold"
+                                                                                         PreviewTextInput="CopiesTextBox_PreviewTextInput"
+                                                                                         DataObject.Pasting="CopiesTextBox_Pasting"
+                                                                                         PreviewKeyDown="CopiesTextBox_PreviewKeyDown"
+                                                                                         LostKeyboardFocus="CopiesTextBox_LostKeyboardFocus"
+                                                                                         GotKeyboardFocus="CopiesTextBox_GotKeyboardFocus"/>
+                                                                                <Button Style="{StaticResource QuantityButton}"
+                                                                                        Content="+"
+                                                                                        Click="IncreaseCopiesButton_Click"/>
+                                                                            </StackPanel>
+                                                                            <Button Grid.Column="4"
+                                                                                    Style="{StaticResource PlainButton}"
+                                                                                    Content="预览"
+                                                                                    Click="SheetPreviewButton_Click"/>
+                                                                        </Grid>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <TextBlock x:Name="NoResultsText"
+                                           Text="没有找到相近资料。换个名称、拼音或首字母试试。"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           Visibility="Collapsed"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="4"
+                            Background="#173247">
+                        <Grid Margin="18">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="本次打印"
+                                       FontSize="19"
+                                       FontWeight="Bold"
+                                       Foreground="White"/>
+                            <StackPanel Grid.Row="1" Margin="0,8,0,14">
+                                <TextBlock x:Name="PrintSummaryText"
+                                           Text="尚未选择子表"
+                                           Foreground="#BFD0D8"
+                                           FontSize="11"/>
+                                <TextBlock x:Name="DefaultPrinterText"
+                                           Margin="0,4,0,0"
+                                           Text="默认打印机：正在读取"
+                                           Foreground="#8FA6B1"
+                                           FontSize="10"/>
+                            </StackPanel>
+                            <ListBox x:Name="PrintCartList"
+                                     Grid.Row="2"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Foreground="White">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="SemiBold"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding GroupTitle}"
+                                                           Margin="0,3,0,0"
+                                                           FontSize="9.5"
+                                                           Foreground="#9EB2BC"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Copies, StringFormat={}× {0}}"
+                                                       Margin="9,0,0,0"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="#F0C86A"
+                                                       FontFamily="Bahnschrift"
+                                                       FontWeight="SemiBold"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Grid.Row="3">
+                                <Button x:Name="ClearSelectionButton"
+                                        Margin="0,0,0,9"
+                                        Style="{StaticResource PlainButton}"
+                                        Content="清空打印清单"
+                                        IsEnabled="False"
+                                        Click="ClearSelectionButton_Click"/>
+                                <Button x:Name="OneClickPrintButton"
+                                        Style="{StaticResource PrintButton}"
+                                        Content="一键打印"
+                                        IsEnabled="False"
+                                        Click="OneClickPrintButton_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Border Grid.Row="2"
+                Background="#FFFFFF"
+                BorderBrush="{StaticResource LineBrush}"
+                BorderThickness="0,1,0,0">
+            <Grid Margin="28,0">
+                <TextBlock x:Name="FooterStatusText"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource MutedBrush}"
+                           FontSize="10.5"
+                           Text="正在核对资料"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

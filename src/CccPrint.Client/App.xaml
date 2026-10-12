@@ -1,0 +1,11 @@
+<Application x:Class="CccPrint.Client.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <FontFamily x:Key="AppFont">Microsoft YaHei UI</FontFamily>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+        </Style>
+    </Application.Resources>
+</Application>
+

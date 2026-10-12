@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/CccPrint.Networking/CccPrint.Networking.csproj" />
+  <Project Path="src/CccPrint.App/CccPrint.App.csproj" />
+  <Project Path="src/CccPrint.Client/CccPrint.Client.csproj" />
+  <Project Path="tools/WpsPdfProbe/WpsPdfProbe.csproj" />
+</Solution>

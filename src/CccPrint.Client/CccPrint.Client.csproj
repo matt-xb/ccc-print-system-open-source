@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CccPrint.Client</RootNamespace>
+    <AssemblyName>CCC资料打印端</AssemblyName>
+    <Product>CCC 资料打印端</Product>
+    <ApplicationIcon>..\..\assets\app-icon.ico</ApplicationIcon>
+    <Version>0.6.29</Version>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms"/>
+    <Using Remove="System.Drawing"/>
+    <ProjectReference Include="..\CccPrint.Networking\CccPrint.Networking.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PdfiumViewer.Updated" Version="2.14.5"/>
+    <PackageReference Include="PdfiumViewer.Native.x86_64.no_v8-no_xfa"
+                      Version="2018.4.8.256"
+                      ExcludeAssets="all"/>
+    <PackageReference Include="TinyPinyin.Net" Version="1.0.2"/>
+  </ItemGroup>
+
+  <Target Name="CopyPdfiumToPublishDirectory" AfterTargets="Publish">
+    <MakeDir Directories="$(PublishDir)x64"/>
+    <Copy SourceFiles="$(NuGetPackageRoot)pdfiumviewer.native.x86_64.no_v8-no_xfa/2018.4.8.256/Build/x64/pdfium.dll"
+          DestinationFolder="$(PublishDir)x64"/>
+  </Target>
+</Project>
