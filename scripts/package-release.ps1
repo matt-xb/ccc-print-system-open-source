@@ -1,16 +1,17 @@
+﻿param(
+    [ValidateSet("Public", "Company")][string]$Edition = "Public",
+    [string]$CompanyConfig,
+    [string]$OutputRoot
+)
 $ErrorActionPreference = "Stop"
-& (Join-Path $PSScriptRoot "build-client-installer.ps1")
 $root = Split-Path -Parent $PSScriptRoot
-$versionRoot = Join-Path $root "dist\0.6.29"
+if (-not $OutputRoot) { $OutputRoot = Join-Path $root "dist\$Edition\0.6.29" }
+$OutputRoot = [IO.Path]::GetFullPath($OutputRoot)
+& (Join-Path $PSScriptRoot "build-client-installer.ps1") -Edition $Edition -CompanyConfig $CompanyConfig -OutputRoot $OutputRoot
+$suffix = if ($Edition -eq "Public") { "公开版" } else { "" }
 foreach ($component in @("admin", "client")) {
-    $output = Join-Path $versionRoot $component
-    $files = @(
-        (Join-Path $output "*公开版.exe"),
-        (Join-Path $output "appsettings.json"),
-        (Join-Path $output "LICENSE"),
-        (Join-Path $output "README.md"),
-        (Join-Path $output "licenses")
-    )
+    $output = Join-Path $OutputRoot $component
+    $files = @((Join-Path $output "*$suffix.exe"), (Join-Path $output "appsettings.json"), (Join-Path $output "LICENSE"), (Join-Path $output "README.md"), (Join-Path $output "licenses"))
     if ($component -eq "client") { $files += Join-Path $output "x64" }
-    Compress-Archive -Path $files -DestinationPath (Join-Path $versionRoot "ccc-$component-v0.6.29-public-windows-x64.zip") -CompressionLevel Optimal
+    Compress-Archive -Path $files -DestinationPath (Join-Path $OutputRoot "ccc-$component-v0.6.29-$Edition-windows-x64.zip") -CompressionLevel Optimal
 }

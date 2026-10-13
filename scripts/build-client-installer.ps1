@@ -1,5 +1,8 @@
-param(
-    [string]$Configuration = "Release"
+﻿param(
+    [string]$Configuration = "Release",
+    [ValidateSet("Public", "Company")][string]$Edition = "Public",
+    [string]$CompanyConfig,
+    [string]$OutputRoot
 )
 
 $ErrorActionPreference = "Stop"
@@ -19,21 +22,21 @@ if (-not $compiler) {
     throw "Inno Setup 7 was not found. Install JRSoftware.InnoSetup.7 with winget."
 }
 
-& powershell.exe `
-    -NoProfile `
-    -ExecutionPolicy Bypass `
-    -File $publishScript `
-    -Configuration $Configuration
+if (-not $OutputRoot) { $OutputRoot = Join-Path $projectRoot "dist\$Edition\0.6.29" }
+$OutputRoot = [IO.Path]::GetFullPath($OutputRoot)
+& $publishScript -Configuration $Configuration -Edition $Edition -CompanyConfig $CompanyConfig -OutputRoot $OutputRoot
 if ($LASTEXITCODE -ne 0) {
     throw "Publishing the applications failed with exit code $LASTEXITCODE."
 }
 
-& $compiler $installerScript
+$compilerArgs = @("/DPublishRoot=$OutputRoot")
+if ($Edition -eq "Company") { $compilerArgs += "/DCompanyEdition" }
+& $compiler @compilerArgs $installerScript
 if ($LASTEXITCODE -ne 0) {
     throw "Building the client installer failed with exit code $LASTEXITCODE."
 }
 
 Write-Output (
     "Installer: " +
-    (Join-Path $projectRoot "dist\0.6.29\installer")
+    (Join-Path $OutputRoot "installer")
 )

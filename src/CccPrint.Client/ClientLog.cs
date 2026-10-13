@@ -8,7 +8,7 @@ public static class ClientLog
     public static string LogDirectory { get; } = Path.Combine(
         Environment.GetFolderPath(
             Environment.SpecialFolder.LocalApplicationData),
-        "CCC资料打印系统公开版",
+        CccPrint.Networking.Edition.DataDirectory,
         "打印端",
         "logs");
 

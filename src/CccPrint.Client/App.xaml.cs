@@ -14,12 +14,12 @@ namespace CccPrint.Client;
 public partial class App : Application
 {
     private const string SingleInstanceMutexName =
-        @"Local\CCCPrint.Public.Client.SingleInstance";
+        CccPrint.Networking.Edition.InstancePrefix + "Client.SingleInstance";
     private const string ActivationEventName =
-        @"Local\CCCPrint.Public.Client.Activate";
+        CccPrint.Networking.Edition.InstancePrefix + "Client.Activate";
     private const string UninstallRegistryPath =
         @"Software\Microsoft\Windows\CurrentVersion\Uninstall\" +
-        @"{5A42B3DB-95E2-4BC4-96A3-990B6DA39F13}_is1";
+        CccPrint.Networking.Edition.InstallerId + "_is1";
     private Mutex? _singleInstanceMutex;
     private EventWaitHandle? _activationEvent;
     private Timer? _legacyDuplicateTimer;
@@ -121,7 +121,7 @@ public partial class App : Application
         }
 
         foreach (var process in Process.GetProcessesByName(
-                     "CCC资料打印端公开版"))
+                     CccPrint.Networking.Edition.ClientName))
         {
             using (process)
             {
@@ -181,7 +181,7 @@ public partial class App : Application
 
             var installedExe = Path.GetFullPath(Path.Combine(
                 installLocation,
-                "CCC资料打印端公开版.exe"));
+                CccPrint.Networking.Edition.ClientName + ".exe"));
             var currentExe = Path.GetFullPath(
                 Environment.ProcessPath ?? string.Empty);
             if (!File.Exists(installedExe) ||

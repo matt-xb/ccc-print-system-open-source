@@ -21,7 +21,7 @@ dotnet build CccPrint.slnx -c Release
 .\scripts\publish.ps1
 ```
 
-管理端和打印端输出到 `dist/0.6.29/admin` 与 `dist/0.6.29/client`。打印所需 PDFium 从声明的 NuGet 依赖获取，源码库不保存原生 DLL；运行包包含 PDFium 和对应许可。
+管理端和打印端输出到 `dist/Public/0.6.29/admin` 与 `dist/Public/0.6.29/client`。打印所需 PDFium 从声明的 NuGet 依赖获取，源码库不保存原生 DLL；运行包包含 PDFium 和对应许可。
 
 生成打印端安装器还需安装 Inno Setup 7：
 
@@ -30,6 +30,23 @@ dotnet build CccPrint.slnx -c Release
 ```
 
 运行 `.\scripts\package-release.ps1` 同时生成两端 ZIP 和打印端安装器；ZIP 采用明确的文件清单，不复制本地运行数据或调试文件。
+
+## 一份源码，两种构建
+
+本仓库是公司版与公开版的唯一程序源码；私有分发仓库只固定引用这里的提交，并保留公司配置。默认 `Edition=Public`；公司版使用原程序名、安装 ID、单实例标识与缓存目录，不改变已有数据位置。
+
+```powershell
+dotnet build CccPrint.slnx -c Release -p:Edition=Company
+dotnet run --project tools/OperationLogChecks -c Release -p:Edition=Public
+dotnet run --project tools/OperationLogChecks -c Release -p:Edition=Company
+.\scripts\package-release.ps1 -Edition Company -CompanyConfig <private-config-directory> -OutputRoot <new-output>
+```
+
+私有配置目录只提供 `admin.json` 和 `client.json`；打包后分别成为双端的 `appsettings.json`。公开构建拒绝公司配置参数，所有构建拒绝覆盖已有输出目录。两种编译分别使用 `bin/Public`、`bin/Company` 和对应的 obj，避免缓存混用。
+
+`publish.ps1`、`build-client-installer.ps1`、`package-release.ps1` 均支持同样的 Edition/CompanyConfig/OutputRoot 参数。只选一个所需入口运行；后两者会自动调用前面的步骤。公司运行数据和实际资料不打入程序包。
+
+此次已验证两种构建、安装器与打包，不更换现用程序或覆盖旧 Release；正式发布前按原流程升版并做实机验收。
 
 ## 使用自己的资料
 

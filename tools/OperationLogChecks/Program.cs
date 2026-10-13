@@ -1,6 +1,18 @@
 using CccPrint.Networking;
 using System.Text.Json;
 
+#if COMPANY_EDITION
+Check(Edition.DataDirectory == "CCC资料打印系统");
+Check(Edition.ClientName == "CCC资料打印端");
+Check(Edition.InstancePrefix == @"Local\CCCPrint.");
+Check(Edition.InstallerId == "{0B43C92F-4FB6-4B40-9261-625EE17A6E26}");
+#else
+Check(Edition.DataDirectory == "CCC资料打印系统公开版");
+Check(Edition.ClientName == "CCC资料打印端公开版");
+Check(Edition.InstancePrefix == @"Local\CCCPrint.Public.");
+Check(Edition.InstallerId == "{5A42B3DB-95E2-4BC4-96A3-990B6DA39F13}");
+#endif
+
 var directory = Path.Combine(Path.GetTempPath(), "ccc-operation-log-" + Guid.NewGuid());
 try
 {

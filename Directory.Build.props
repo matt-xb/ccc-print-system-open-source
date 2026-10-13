@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <Edition Condition="'$(Edition)' == ''">Public</Edition>
+    <EditionSuffix Condition="'$(Edition)' == 'Public'">公开版</EditionSuffix>
+    <DefineConstants Condition="'$(Edition)' == 'Company'">$(DefineConstants);COMPANY_EDITION</DefineConstants>
+    <BaseIntermediateOutputPath>obj\$(Edition)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin\$(Edition)\</BaseOutputPath>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**;**/bin/**</DefaultItemExcludes>
+  </PropertyGroup>
+  <Target Name="ValidateEdition" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(Edition)' != 'Public' and '$(Edition)' != 'Company'" Text="Edition must be Public or Company." />
+  </Target>
+</Project>

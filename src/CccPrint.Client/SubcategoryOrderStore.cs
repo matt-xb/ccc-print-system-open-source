@@ -13,7 +13,7 @@ public sealed class SubcategoryOrderStore
 
     private readonly string _settingsPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "CCC资料打印系统公开版",
+        CccPrint.Networking.Edition.DataDirectory,
         "打印端",
         "subcategory-order.json");
 

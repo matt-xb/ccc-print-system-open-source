@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>CccPrint</RootNamespace>
-    <AssemblyName>CCC资料管理端公开版</AssemblyName>
+    <AssemblyName>CCC资料管理端$(EditionSuffix)</AssemblyName>
     <Product>CCC 资料管理端</Product>
     <ApplicationIcon>..\..\assets\app-icon.ico</ApplicationIcon>
     <Version>0.6.29</Version>
