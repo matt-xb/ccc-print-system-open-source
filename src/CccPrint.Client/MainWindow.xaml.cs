@@ -493,9 +493,13 @@ public partial class MainWindow : Window
     {
         if (!await _syncGate.WaitAsync(0, cancellationToken))
         {
+            if (userInitiated) ClientLog.Event("sync", "skipped", "already_running");
             return;
         }
 
+        var operationId = Guid.NewGuid().ToString("N");
+        var started = Stopwatch.StartNew();
+        ClientLog.Event("sync", "started", id: operationId);
         try
         {
             var localReady = HasUsableLocalLibrary();
@@ -514,6 +518,7 @@ public partial class MainWindow : Window
             var remoteState = await GetRemoteStateAsync(cancellationToken);
             if (remoteState is null)
             {
+                ClientLog.Event("sync", "offline", "server_unavailable", operationId, started.ElapsedMilliseconds);
                 _connectedServer = null;
                 SoftwareUpdateButton.IsEnabled = false;
                 RetryButton.Visibility = Visibility.Visible;
@@ -532,6 +537,7 @@ public partial class MainWindow : Window
             var status = remoteState.Status;
             if (string.IsNullOrWhiteSpace(status.Version))
             {
+                ClientLog.Event("sync", "skipped", "no_published_library", operationId, started.ElapsedMilliseconds);
                 SetLibraryReady(localReady);
                 SetConnectionState(
                     localReady ? "#D59A2D" : "#C94335",
@@ -608,6 +614,7 @@ public partial class MainWindow : Window
                 synchronized ? "同步完成" : "资料已是最新",
                 $"本地资料已就绪 · {_localManifest!.Files.Count} 份 PDF");
 
+            ClientLog.Event("sync", synchronized ? "activated" : "unchanged", id: operationId, elapsedMs: started.ElapsedMilliseconds, count: _localManifest!.Files.Count);
             var now = DateTimeOffset.UtcNow;
             if (!string.Equals(
                     _lastReportedLibraryVersion,
@@ -630,6 +637,7 @@ public partial class MainWindow : Window
         catch (OperationCanceledException)
             when (!cancellationToken.IsCancellationRequested)
         {
+            ClientLog.Event("sync", "failed", "connection_timeout", operationId, started.ElapsedMilliseconds);
             _connectedServer = null;
             SoftwareUpdateButton.IsEnabled = false;
             var localReady = HasUsableLocalLibrary();
@@ -644,10 +652,12 @@ public partial class MainWindow : Window
         }
         catch (OperationCanceledException)
         {
+            ClientLog.Event("sync", "cancelled", "window_closed", operationId, started.ElapsedMilliseconds);
             // 关闭窗口时停止检测或同步。
         }
         catch (Exception exception)
         {
+            ClientLog.Event("sync", "failed", exception.GetBaseException().GetType().Name, operationId, started.ElapsedMilliseconds);
             ClientLog.Write("后台核对或同步资料失败", exception);
             var localReady = HasUsableLocalLibrary();
             SetLibraryReady(localReady);
@@ -1131,6 +1141,7 @@ public partial class MainWindow : Window
     {
         if (_localManifest is null)
         {
+            ClientLog.Event("print", "skipped", "no_local_library");
             return;
         }
 
@@ -1149,6 +1160,7 @@ public partial class MainWindow : Window
                 ShowInformation(
                     $"找不到“{item.Name}”的本地 PDF，请返回主页重试同步。",
                     "一键打印");
+                ClientLog.Event("print", "failed", "missing_local_pdf");
                 return;
             }
 
@@ -1169,9 +1181,13 @@ public partial class MainWindow : Window
             MessageBoxImage.Question);
         if (answer != MessageBoxResult.Yes)
         {
+            ClientLog.Event("print", "skipped", "user_cancelled");
             return;
         }
 
+        var operationId = Guid.NewGuid().ToString("N");
+        var started = Stopwatch.StartNew();
+        ClientLog.Event("print", "started", id: operationId, count: totalCopies);
         OneClickPrintButton.IsEnabled = false;
         try
         {
@@ -1181,6 +1197,7 @@ public partial class MainWindow : Window
                     $"排队打印 {count}/{selected.Length}";
             });
             var submitted = await _printService.PrintAsync(jobs, progress);
+            ClientLog.Event("print", "submitted", "windows_queue_only", operationId, started.ElapsedMilliseconds, submitted);
             MessageBox.Show(
                 $"已按顺序提交 {submitted} 份资料，共 {totalCopies} 份。\n\n" +
                 "如果需要更换打印机，请先在 Windows 中修改默认打印机。",
@@ -1190,6 +1207,7 @@ public partial class MainWindow : Window
         }
         catch (Exception exception)
         {
+            ClientLog.Event("print", "failed", exception.GetBaseException().GetType().Name, operationId, started.ElapsedMilliseconds);
             ClientLog.Write("批量打印失败", exception);
             MessageBox.Show(
                 $"打印失败：{exception.GetBaseException().Message}",

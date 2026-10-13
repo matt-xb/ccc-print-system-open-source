@@ -33,6 +33,7 @@ public partial class App : Application
     {
         EnsureWindowsDirectoryEnvironment();
         base.OnStartup(e);
+        AdminLog.Write("startup", "started", reason: Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
 
         var options = AppOptions.Load(AppContext.BaseDirectory);
         var catalog = new LibraryCatalogService(options.SourcePath);
@@ -109,6 +110,7 @@ public partial class App : Application
         try
         {
             await _server.StartAsync();
+            AdminLog.Write("server", "listening");
 
             var appVersion =
                 Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)
@@ -126,6 +128,7 @@ public partial class App : Application
         }
         catch (Exception ex)
         {
+            AdminLog.Write("server", "failed", reason: ex.GetBaseException().GetType().Name);
             _mainWindow?.SetServerStatus(
                 isRunning: false,
                 $"服务启动失败 · {ex.Message}");

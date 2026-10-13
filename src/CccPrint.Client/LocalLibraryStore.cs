@@ -291,7 +291,7 @@ public sealed class LocalLibraryStore
                 exception is IOException or UnauthorizedAccessException)
             {
                 ClientLog.Write(
-                    $"清理旧资料版本失败：{directory.Name}",
+                    "清理旧资料版本失败",
                     exception);
             }
         }

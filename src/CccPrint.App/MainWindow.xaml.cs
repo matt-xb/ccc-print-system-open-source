@@ -1530,6 +1530,7 @@ public partial class MainWindow : Window
     {
         if (_selectedBatch is null || _releaseState is null)
         {
+            AdminLog.Write("publish", "skipped", reason: "no_batch");
             return;
         }
 
@@ -1559,9 +1560,13 @@ public partial class MainWindow : Window
             MessageBoxImage.Warning);
         if (answer != MessageBoxResult.Yes)
         {
+            AdminLog.Write("publish", "skipped", reason: "user_cancelled");
             return;
         }
 
+        var operationId = Guid.NewGuid().ToString("N");
+        var started = Stopwatch.StartNew();
+        AdminLog.Write("publish", "started", id: operationId, count: includedOutputs.Length);
         try
         {
             SetBusy(true, "正在生成正式版本并校验文件…");
@@ -1583,6 +1588,7 @@ public partial class MainWindow : Window
                     .Concat(_selectedBatch.RemovedSourcePaths)
                     .ToArray());
             await LoadStateAsync(_selectedBatch.BatchId);
+            AdminLog.Write("publish", "published", id: operationId, elapsedMs: started.ElapsedMilliseconds, count: result.FileCount);
             MessageBox.Show(
                 $"正式版本 {result.Version} 已发布，共 {result.FileCount} 份 PDF。\n\n" +
                 "仓库端下次打开软件会自动核对并下载。",
@@ -1592,6 +1598,7 @@ public partial class MainWindow : Window
         }
         catch (Exception exception)
         {
+            AdminLog.Write("publish", "failed", reason: exception.GetBaseException().GetType().Name, id: operationId, elapsedMs: started.ElapsedMilliseconds);
             MessageBox.Show(
                 exception.GetBaseException().Message,
                 "发布失败",

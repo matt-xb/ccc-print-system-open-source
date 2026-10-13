@@ -7,6 +7,7 @@ using CccPrint.Networking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -68,6 +69,25 @@ public sealed class UpdateServer
         });
 
         var app = builder.Build();
+        app.Use(async (context, next) =>
+        {
+            var id = Guid.NewGuid().ToString("N");
+            var started = System.Diagnostics.Stopwatch.StartNew();
+            AdminLog.Write("http", "started", id: id);
+            try
+            {
+                await next(context);
+                var route = (context.GetEndpoint() as RouteEndpoint)?.RoutePattern.RawText ?? "unmatched";
+                AdminLog.Write($"http:{route}", context.RequestAborted.IsCancellationRequested ? "aborted" :
+                    context.Response.StatusCode >= 400 ? "failed" : "completed",
+                    reason: $"http_{context.Response.StatusCode}", id: id, elapsedMs: started.ElapsedMilliseconds);
+            }
+            catch (Exception exception)
+            {
+                AdminLog.Write("http", "failed", reason: exception.GetType().Name, id: id, elapsedMs: started.ElapsedMilliseconds);
+                throw;
+            }
+        });
 
         app.MapGet("/", () => Results.Redirect("/api/health"));
 
